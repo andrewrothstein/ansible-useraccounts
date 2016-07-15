@@ -1,21 +1,4 @@
 ---
-- name: create useful groups
-  become: yes
-  become_user: root
-  group: name={{item}} state=present
-  with_items:
-    - docker
-    - wheel
-    - admin
-    - dev
-    - vboxusers
-    - sudo
-    - ada
-    - libvirt
-    - blade
-    - qemu
-    - kvm
-
 - name: create user arothste
   become: yes
   become_user: root
@@ -23,7 +6,7 @@
     name=arothste
     state=present
     shell=/bin/bash
-    groups=docker,admin,dev,wheel,vboxusers,sudo,ada,libvirt,blade,qemu,kvm
+    groups=docker,admin,dev,wheel,vboxusers,sudo,ada,libvirt,blade,qemu,kvm,lxd
 
 - name: create /home/arothste/.ssh
   become: yes

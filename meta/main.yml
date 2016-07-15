@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Andrew Rothstein
-  description: creates the arothste account and useful groups
+  description: creates the arothste account
   company: BlackRock
   license:
     - MIT
@@ -12,15 +12,18 @@ galaxy_info:
         - 7
     - name: Fedora
       versions:
-        - 21
-        - 22
         - 23
     - name: Ubuntu
       versions:
         - trusty
+        - xenial
 
   galaxy_tags:
     - development
 
-dependencies: []
+dependencies:
+  - role: andrewrothstein.userful-groups
+    version: v1.0.1
+
+  
   
