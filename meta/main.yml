@@ -22,7 +22,7 @@ galaxy_info:
     - development
 
 dependencies:
-  - role: andrewrothstein.userful-groups
+  - role: andrewrothstein.useful-groups
     version: v1.0.1
 
   
