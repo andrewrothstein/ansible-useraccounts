@@ -1,0 +1,16 @@
+---
+home_prefix: /home
+users:
+  - n: arothste
+    s: /bin/bash
+    g:
+      - docker
+      - admin
+      - dev
+      - wheel
+      - vboxusers
+      - sudo
+      - libvirt
+      - qemu
+      - kvm
+      - lxd

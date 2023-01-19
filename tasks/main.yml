@@ -1,47 +1,33 @@
 ---
-- name: create user arothste
-  become: yes
+- include_role:
+    name: andrewrothstein.useful-groups
+- name: create users
+  become: true
   become_user: root
-  user: >
-    name=arothste
-    state=present
-    shell=/bin/bash
-    groups=docker,admin,dev,wheel,vboxusers,sudo,ada,libvirt,blade,qemu,kvm,lxd
+  with_items: '{{ users }}'
+  user:
+    state: present
+    name: '{{ item.n }}'
+    shell: '{{ item.s }}'
+    append: true
+    groups: '{{ item.g }}'
 
-- name: create /home/arothste/.ssh
-  become: yes
-  become_user: arothste
-  file: >
-    path=/home/arothste/.ssh
-    state=directory
-    mode=0700
-  
-- name: install /home/arothste/.ssh/authorized_keys
-  become: yes
-  become_user: arothste
-  copy: >
-    mode=600
-    src=home/arothste/.ssh/authorized_keys
-    dest=/home/arothste/.ssh/authorized_keys
+- name: creating ssh dirs
+  become: true
+  become_user: root
+  with_items: '{{ users }}'
+  file:
+    state: directory
+    path: '{{ home_prefix }}/{{ item.n }}/.ssh'
+    mode: 0700
+    owner: '{{ item.n }}'
 
-- name: create /home/arothste/.atom
-  when: proxy_env.http_proxy is defined
-  become: yes
-  become_user: arothste
-  file: >
-    mode=700
-    path=/home/arothste/.atom
-    state=directory
-
-- name: install /home/arothste/.atom/.apmrc
-  when: proxy_env.http_proxy is defined
-  become: yes
-  become_user: arothste
-  template: >
-    owner=arothste
-    group=arothste
-    mode=600
-    src=home/arothste/.atom/.apmrc
-    dest=/home/arothste/.atom/.apmrc
-  
-  
+- name: installing authorized keys
+  become: true
+  become_user: root
+  with_items: '{{ users }}'
+  copy:
+    src: home/{{ item.n }}/.ssh/authorized_keys
+    dest: '{{ home_prefix }}/{{ item.n }}/.ssh/authorized_keys'
+    owner: '{{ item.n }}'
+    mode: '{{ item.m | default("0600") }}'
