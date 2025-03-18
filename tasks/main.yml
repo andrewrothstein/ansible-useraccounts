@@ -1,33 +1,34 @@
 ---
-- include_role:
-    name: andrewrothstein.useful-groups
-- name: create users
+- name: Installing andrewrothstein.userful_groups
+  ansible.builtin.include_role:
+    name: andrewrothstein.useful_groups
+- name: Creating users
   become: true
   become_user: root
   with_items: '{{ users }}'
-  user:
+  ansible.builtin.user:
     state: present
     name: '{{ item.n }}'
     shell: '{{ item.s }}'
     append: true
     groups: '{{ item.g }}'
 
-- name: creating ssh dirs
+- name: Creating ssh dirs
   become: true
   become_user: root
   with_items: '{{ users }}'
-  file:
+  ansible.builtin.file:
     state: directory
     path: '{{ home_prefix }}/{{ item.n }}/.ssh'
-    mode: 0700
+    mode: '700'
     owner: '{{ item.n }}'
 
-- name: installing authorized keys
+- name: Installing authorized keys
   become: true
   become_user: root
   with_items: '{{ users }}'
-  copy:
+  ansible.builtin.copy:
     src: home/{{ item.n }}/.ssh/authorized_keys
     dest: '{{ home_prefix }}/{{ item.n }}/.ssh/authorized_keys'
     owner: '{{ item.n }}'
-    mode: '{{ item.m | default("0600") }}'
+    mode: '{{ item.m | default("600") }}'
